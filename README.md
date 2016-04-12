@@ -5,9 +5,9 @@ This project is based on [InboxLayout](https://github.com/zhaozhentao/InboxLayou
 
 <img src="https://raw.githubusercontent.com/DanielKoehler/InboxLayout/master/demo.gif" width="360" height="640" />
 
+## Usage
 
-
-## Example Activity 
+#### Layout 
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -41,4 +41,74 @@ This project is based on [InboxLayout](https://github.com/zhaozhentao/InboxLayou
 
     </FrameLayout>
 </LinearLayout>
+```
+
+```java 
+    
+    private MyRowItemAdapter mAdapter;
+    
+    ... 
+    
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+    
+        super.onCreate(savedInstanceState);
+
+        final InboxBackgroundScrollView mListView = (InboxBackgroundScrollView)findViewById(R.id.inboxList);
+
+        inboxLayoutScrollView = (InboxLayoutScrollView) findViewById(R.id.inboxlayoutContent);
+        inboxLayoutScrollView.setBackgroundScrollView(mListView);// ListView
+        inboxLayoutScrollView.setCloseDistance(50);
+
+        // Defined Array values to show in ListView
+        MyRowItem[] values = {
+                new MyRowItem("some value", "another value"),
+        };
+
+        // specify an adapter (see also next example)
+        mAdapter = new MyRowItemAdapter(this, values);
+
+        mListView.setAdapter(mAdapter);
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                inboxLayoutScrollView.openWithAnim(view);
+
+            }
+        });
+    }
+    
+    ...
+        
+```
+
+#### Adapter
+
+
+```java
+
+class MyRowItemAdapter extends ArrayAdapter<MyRowItem>  {
+
+    private final Context context;
+    private final MyRowItem[] values;
+
+    public MyAdapter(Context context, MyRowItem[] values) {
+        super(context, -1, values);
+        this.context = context;
+        this.values = values;
+    }
+    
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+
+        LinearLayout rowView = (LinearLayout) LayoutInflater.from(parent.getContext()).inflate(R.layout.rowCell, parent, false);
+        // set up row.
+        return rowView;
+
+    }
+
+}
+
 ```
